@@ -1,33 +1,32 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <cube-button>22222</cube-button>
-    <router-view/>
+    <v-header :seller="seller"></v-header>
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import VHeader from 'components/v-header/v-header'
+import { getSeller } from 'api'
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+export default {
+  name: 'app',
+  data() {
+    return {
+      seller: {}
     }
+  },
+  /**
+   * 钩子函数，当前还未挂载，即未渲染至html,常用来初始化数据
+   */
+  created() {
+    getSeller().then(seller=> {
+      this.seller = seller
+    })
+  },
+  components: {
+    VHeader
   }
 }
-</style>
+</script>
+
+<style lang="stylus"></style>
