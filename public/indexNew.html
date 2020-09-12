@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=\, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p v-if="seen">
+            {{msg}}
+        </p>
+        <button v-on:click="reverseMsg">反转消息</button>
+        <button v-on:click="hiddenMsg">{{btnMsg}}</button>
+
+        <br/><br/>
+        <span v-bind:title="tooltipMsg">
+            鼠标悬停查看动态绑定提示
+        </span>
+
+        <br/><br/>
+        <p>{{inputMsg}}</p>
+        <input v-model="inputMsg">
+
+        <br/><br/>
+        <ol>
+            <li v-for="todo in todoList">
+                {{todo.text}}
+            </li>
+        </ol>
+        <button v-on:click="pushData">加1</button>
+        <button v-on:click="popData">减1</button>
+
+        <br/><br/>
+        <ol>
+            <!--创建一个todo-item组件的实例-->
+            <todo-item></todo-item>
+        </ol>
+    </div>
+    <script>
+        //定义名为todo-item的组件
+        Vue.component('todo-item', {
+            template: '<li>这是个代办事项</li>'
+        })
+
+        const app = new Vue({
+            el:"#app",
+            data: {
+                msg: "Hello Vue.js!",
+                btnMsg: "隐藏消息",
+                tooltipMsg: "竟然被你发现了！",
+                inputMsg: "你竟然抄袭！",
+                seen: true,
+                index: 0,
+                todoList: [
+                    {text: "数组元素1"},
+                    {text: "数组元素2"},
+                    {text: "数组元素3"},
+                    {text: "数组元素4"},
+                    {text: "数组元素5"}]
+            },
+            methods:{
+                /**
+                 * 消息反转 
+                 */
+                reverseMsg: function(){
+                    this.msg = this.msg.split(' ').reverse().join(' ')
+                },
+                /**
+                 * 消息显隐 
+                 */
+                hiddenMsg: function(){
+                    this.seen = this.seen ? false : true
+                    this.btnMsg = this.seen ? "隐藏消息" : "显示消息"
+                },
+                /**
+                 * 增加数组元素 
+                 */
+                pushData: function(){
+                    this.index = this.todoList.length
+                    this.index++
+                    this.todoList.push({text: "数组元素"+ this.index})
+                },
+                /**
+                 * 减少数组元素 
+                 */
+                popData: function(){
+                    this.index = this.todoList.length
+                    this.index--
+                    this.todoList.pop()
+                }
+            }
+        })
+    </script>
+</body>
+</html>

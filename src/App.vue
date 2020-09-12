@@ -4,6 +4,7 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>
+    <cube-button>22222</cube-button>
     <router-view/>
   </div>
 </template>

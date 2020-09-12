@@ -1,0 +1,26 @@
+{
+    "seller":{
+        "name":"sellerTest",
+        "description":"",
+        "supports":[{
+            "type": 0,
+            "description": "sellerTestDesc"
+        }]
+    },
+    "goods":{
+        "name":"goodsTest",
+        "description":"",
+        "supports":[{
+            "type": 0,
+            "description": "goodsTestDesc"
+        }]
+    },
+    "ratings":{
+        "name":"ratingsTest",
+        "description":"",
+        "supports":[{
+            "type": 0,
+            "description": "ratingsTestDesc"
+        }]
+    }
+}
