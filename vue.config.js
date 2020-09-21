@@ -11,6 +11,7 @@ function resolve(dir){
 
 module.exports = {
   css: {
+    //向CSS相关的loader传递选项
     loaderOptions: {
       stylus: {
         'resolve url': true,
@@ -20,6 +21,7 @@ module.exports = {
       }
     }
   },
+  //传递任何第三方插件选项的对象
   pluginOptions: {
     'cube-ui': {
       postCompile: true,
@@ -48,6 +50,7 @@ module.exports = {
       })
     }
   },
+  //接收一个基于 webpack-chain 的 ChainableConfig 实例。允许对内部的 webpack 配置进行更细粒度的修改
   chainWebpack(config){
     config.resolve.alias
       .set('components', resolve('src/components'))
