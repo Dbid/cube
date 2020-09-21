@@ -1,6 +1,6 @@
 <template>
   <div class="shopcart">
-    <div class="content">
+    <div class="content" @click="toggleList">
       <div class="content-left">
         <div class="logo-wrapper">
           <div class="logo" :class="{'hightlight':totalCount>0}">
@@ -111,7 +111,8 @@
       }
     },
     created(){
-      this.dropBalls =[]
+      this.dropBalls = []
+      this.listFold = true
     },
     methods:{
       drop(el){
@@ -148,6 +149,31 @@
           ball.show = false
           el.style.display='none'
         }
+      },
+      toggleList(){
+        if(this.listFold){
+          if(!this.totalCount){
+            return
+          }
+          this.listFold = false
+          this._showShopCartList()
+        }
+        else{
+          this.listFold = true
+          this._hideShopCartList()
+        }
+      },
+      _showShopCartList(){
+        //单例
+        this.shopCartListComp = this.shopCartListComp || this.$createShopCartList({
+          $props:{
+            selectFoods: 'selectFoods'
+          }
+        })
+        this.shopCartListComp.show()
+      },
+      _hideShopCartList(){
+        this.shopCartListComp.hide()
       }
     },
     components:{
