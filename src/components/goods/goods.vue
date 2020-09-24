@@ -35,6 +35,7 @@
         >
           <ul>
             <li 
+              @click="selectFood(food)"
               v-for="food in good.foods" 
               :key="food.name"
               class="food-item"
@@ -79,7 +80,6 @@
   import SupportIco from 'components/support-ico/support-ico'
   import Bubble from 'components/bubble/bubble'
   
-  
   export default {
     name: 'goods',
     props: {
@@ -96,7 +96,8 @@
         scrollOptions:{
           click:false,//防止scroll嵌套情况下触发两次点击
           directionLockThreshold: 0
-        }
+        },
+        selectedFood: {}
       }
     },
     computed:{
@@ -142,6 +143,45 @@
       },
       onAdd(el){
         this.$refs.shopCart.drop(el)
+      },
+      selectFood(food){
+        this.selectedFood = food
+        this._showFood()
+        this._showShopCartSticky() 
+        //this.$refs.shopCart._showShopCartSticky() //TODO 为什么不采用这种方法而是重新创建方法_showShopCartSticky？
+      },
+      _showFood(){
+        //1、展现商品详情浮层
+        this.foodComp = this.foodComp || this.$createFood({
+          $props: {
+            food: 'selectedFood'
+          },
+          $events: {
+            leave: ()=> {
+              this._hideShopCartSticky()
+              //this.$refs.shopCart._hideShopCartSticky() //TODO 为什么报错？
+            },
+            add: (el)=> {
+              //增加小球动画
+              this.shopCartStickyComp.drop(el)
+            }
+          }
+        })
+        this.foodComp.show()
+      },
+      _showShopCartSticky(){
+        this.shopCartStickyComp = this.shopCartStickyComp || this.$createShopCartSticky({
+          $props: {
+            selectFoods: 'selectFoods',
+            minPrice: this.seller.minPrice,
+            deliveryPrice: this.seller.deliveryPrice,
+            fold: true
+          }
+        })
+        this.shopCartStickyComp.show()
+      },
+      _hideShopCartSticky(){
+        this.shopCartStickyComp.hide()
       }
     },
     components:{
