@@ -1,18 +1,18 @@
 <template>
   <transition name="fade">
     <cube-popup
-      v-show="visiable"
+      v-show="visible"
       :mask-closable=true
       :z-index=90
       position="bottom"
       type="shop-cart-list"
       @mask-click="maskClick"
     >
-      <transition name="move">
-        <div v-show="visiable">
+      <transition name="move" @after-leave="onLeave">
+        <div v-show="visible">
           <div class="list-header">
             <h1 class="title">购物车</h1>
-            <span class="empty">清空</span>
+            <span class="empty" @click="empty">清空</span>
           </div>
           <cube-scroll class="list-content" ref="listContent">
             <ul>
@@ -22,7 +22,11 @@
                   <span>￥{{food.price*food.count}}</span>
                 </div>
                 <div class="cart-control-wrapper">
-                  <cart-control :food="food"></cart-control>
+                  <cart-control 
+                    @add="onAdd"
+                    :food="food"
+                  >
+                  </cart-control>
                 </div>
               </li>
             </ul>
@@ -35,8 +39,14 @@
 
 <script>
 import CartControl from 'components/cart-control/cart-control'
+import popupMixin from 'common/mixins/popup'
+
+const EVENT_LEAVE='leave'
+const EVENT_ADD='add'
+const EVENT_SHOW='show'
 
 export default {
+  mixins: [popupMixin],
   name: 'shop-cart-list',
   props:{
     selectFoods: {
@@ -46,20 +56,36 @@ export default {
       }
     }
   },
-  data(){
-    return{
-      visiable: false
-    }
+  created(){
+    this.$on(EVENT_SHOW, ()=>{
+      this.$nextTick(()=>{
+        this.$refs.listContent.refresh()
+      })
+    })
   },
   methods: {
-    show(){
-      this.visiable = true
-    },
-    hide(){
-      this.visiable = false
-    },
     maskClick(){
       this.hide()
+    },
+    onLeave(){
+      this.$emit(EVENT_LEAVE)
+    },
+    onAdd(target){
+      this.$emit(EVENT_ADD, target)
+    },
+    empty(){
+      this.$createDialog({
+        type: 'confirm',
+        content: '确认清空购物车吗？',
+        $events: {
+          confirm: () => {
+            this.selectFoods.forEach((food)=>{
+              food.count = 0
+            })
+            this.hide()
+          }
+        }
+      }).show()
     }
   },
   components:{
