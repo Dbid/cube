@@ -2,11 +2,11 @@ import { get } from './helpers'
 
 const getSeller = get('/api/seller')
 const getGoods = get('/api/goods')
-//const getRating = get('/api/rating')
+// const getRatingS = get('/api/ratings')
 
 export {
     getSeller,
     getGoods
-    //getRating
+    // getRatings
 }
 
