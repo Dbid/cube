@@ -159,11 +159,12 @@
           $events: {
             leave: ()=> {
               this._hideShopCartSticky()
-              //this.$refs.shopCart._hideShopCartSticky() //TODO 为什么报错？
+              //this.$refs.shopCart._hideShopCartSticky()
             },
             add: (el)=> {
               //增加小球动画
               this.shopCartStickyComp.drop(el)
+              //this.$refs.shopCart.drop(el) //TODO 为什么报错？
             }
           }
         })
