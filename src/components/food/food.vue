@@ -3,7 +3,8 @@
     @after-leave="afterLeave"
     name="move">
     <div class="food" v-show="visible">
-      <cube-scroll ref="scroll">
+      <cube-scroll 
+      :data="computedRatings" ref="scroll">
         <div class="food-content">
           <div class="image-header">
             <img :src="food.image">
@@ -47,7 +48,8 @@
               :selectType="selectType"
               :desc="desc"
               @select="onSelect"
-              @toggle="onToggle">
+              @toggle="onToggle"
+              v-if="ratings.length">
             </rating-select>
             <div class="rating-wrapper">
               <ul v-show="computedRatings && computedRatings.length">
@@ -86,15 +88,14 @@ import CartControl from 'components/cart-control/cart-control'
 import RatingSelect from 'components/rating-select/rating-select'
 import popupMixin from 'common/mixins/popup'
 import moment from 'moment'
+import ratingMixin from 'common/mixins/rating'
 
 const EVENT_SHOW = 'show'
 const EVENT_LEAVE = 'leave'
 const EVENT_ADD = 'add'
 
-const ALL = 2
-
 export default {
-  mixins: [popupMixin],
+  mixins: [popupMixin, ratingMixin],
   name: 'food',
   props:{
     food: {
@@ -103,8 +104,6 @@ export default {
   },
   data(){
     return{
-      onlyContent: true,
-      selectType: ALL,
       desc: {
         'all': '全部',
         'positive': '推荐',
@@ -115,18 +114,6 @@ export default {
   computed: {
     ratings(){
       return this.food.ratings
-    },
-    computedRatings(){
-      let ret = []
-      this.ratings.forEach((rating)=>{
-        if(this.onlyContent && !rating.text){
-          return
-        }
-        if(this.selectType === ALL || this.selectType === rating.rateType){
-          ret.push(rating)
-        }
-      })
-      return ret
     }
   },
   created(){
@@ -149,12 +136,6 @@ export default {
     },
     format(time){
       return moment(time).format('YYYY-MM-DD hh:mm')
-    },
-    onSelect(type){
-      this.selectType = type
-    },
-    onToggle(){
-      this.onlyContent = !this.onlyContent
     }
   },  
   components: {
