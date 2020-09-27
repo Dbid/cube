@@ -53,7 +53,6 @@ export default {
    */
   created() {
     this._getSeller()
-    //this._getRating()
   },
   methods:{
     _getSeller(){
