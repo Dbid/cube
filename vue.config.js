@@ -29,11 +29,13 @@ module.exports = {
     }
   },
   devServer:{
+    // before方法：在其他所有中间件之前执行自定义的中间件
     before(app){
       app.get('/api/seller',function(req,res){
+        const id = req.query.id
         res.json({
           errno: 0,
-          data: seller
+          data: Object.assign({}, seller, {id}) //通过Object.assign方法将对象seller和id合并到一起
         })
       })
       app.get('/api/goods',function(req,res){
